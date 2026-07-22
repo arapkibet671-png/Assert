@@ -1,8 +1,6 @@
 const express = require('express');
-const fetch = require('node-fetch');
 const path = require('path');
 const helmet = require('helmet');
-const FormData = require('form-data');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -56,15 +54,16 @@ async function sendTelegramAdminPrompt(appId, details) {
         try {
             const base64Data = primaryImage.split(',')[1];
             const buffer = Buffer.from(base64Data, 'base64');
+            const blob = new Blob([buffer], { type: 'image/jpeg' });
 
             const form = new FormData();
             form.append('chat_id', TELEGRAM_CHAT_ID);
-            form.append('photo', buffer, { filename: 'payment_receipt.jpg', contentType: 'image/jpeg' });
+            form.append('photo', blob, 'payment_receipt.jpg');
             form.append('caption', text);
             form.append('parse_mode', 'Markdown');
             form.append('reply_markup', JSON.stringify(inlineKeyboard));
 
-            // Instant fire-and-forget transmission
+            // Instant transmission using native fetch & FormData
             fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, {
                 method: 'POST',
                 body: form
@@ -73,9 +72,10 @@ async function sendTelegramAdminPrompt(appId, details) {
             // Send secondary selfie image if both exist
             if (details.paymentScreenshotDataUrl && details.selfieDataUrl && details.selfieDataUrl.startsWith('data:image')) {
                 const selfieBuffer = Buffer.from(details.selfieDataUrl.split(',')[1], 'base64');
+                const selfieBlob = new Blob([selfieBuffer], { type: 'image/jpeg' });
                 const selfieForm = new FormData();
                 selfieForm.append('chat_id', TELEGRAM_CHAT_ID);
-                selfieForm.append('photo', selfieBuffer, { filename: 'selfie.jpg', contentType: 'image/jpeg' });
+                selfieForm.append('photo', selfieBlob, 'selfie.jpg');
                 selfieForm.append('caption', `📷 *Selfie ID Verification Photo for App ID:* \`${appId}\``);
                 selfieForm.append('parse_mode', 'Markdown');
 
