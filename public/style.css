@@ -1,0 +1,45 @@
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+body { background-color: #f3f4f6; color: #1f2937; display: flex; justify-content: center; padding: 20px; }
+.container { background: white; max-width: 600px; width: 100%; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); padding: 30px; }
+header { text-align: center; margin-bottom: 25px; }
+header h1 { color: #008744; font-size: 1.8rem; }
+
+/* Horizontal Stepper */
+.stepper-horizontal { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; }
+.step-item { display: flex; flex-direction: column; align-items: center; z-index: 2; position: relative; }
+.step-circle { width: 35px; height: 35px; border-radius: 50%; background: #e5e7eb; color: #6b7280; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-bottom: 8px; transition: 0.3s; }
+.step-label { font-size: 0.8rem; color: #6b7280; font-weight: 600; }
+.step-line { flex-grow: 1; height: 3px; background: #e5e7eb; margin: -20px 10px 0 10px; z-index: 1; }
+.step-item.active .step-circle { background: #008744; color: white; }
+.step-item.completed .step-circle { background: #10b981; color: white; }
+
+.form-stage { display: none; }
+.form-stage.active { display: block; animation: fadeIn 0.4s; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Products */
+.product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.product-card { border: 2px solid #e5e7eb; border-radius: 8px; padding: 15px; cursor: pointer; transition: 0.2s; display: block; text-align: center; }
+.product-card:hover { border-color: #008744; background: #f0fdf4; }
+.product-card input[type="radio"] { display: none; }
+.product-card input[type="radio"]:checked + .card-content { color: #008744; }
+.product-card input[type="radio"]:checked ~ .product-card { border-color: #008744; background: #f0fdf4; }
+.icon { font-size: 2rem; display: block; margin-bottom: 10px; }
+.model-tag { font-size: 0.75rem; color: #0284c7; background: #e0f2fe; padding: 2px 8px; border-radius: 12px; margin-top: 4px; font-weight: 600; }
+.deposit-text { font-size: 0.9rem; color: #008744; font-weight: bold; margin-top: 6px; }
+
+/* Inputs & Buttons */
+.input-group { margin-bottom: 15px; }
+.input-group label { display: block; font-weight: 600; margin-bottom: 5px; }
+.input-group input { width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 1rem; }
+.btn-primary { width: 100%; background: #008744; color: white; padding: 15px; border: none; border-radius: 6px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 15px; }
+.btn-primary:disabled { background: #9ca3af; cursor: not-allowed; }
+
+/* Payment & Status Cards */
+.pochi-box, .stk-card, .success-card { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin-top: 15px; text-align: center; }
+.pochi-list { text-align: left; margin: 15px 0 15px 20px; line-height: 1.6; }
+.highlight-amount { color: #008744; font-size: 1.2rem; }
+.spinner { border: 4px solid #f3f3f3; border-top: 4px solid #008744; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.celebration-icon { font-size: 3rem; margin-bottom: 10px; }
+.success-card h2 { color: #008744; }
